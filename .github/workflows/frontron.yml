@@ -1,0 +1,26 @@
+name: Sync Frontron Project
+
+on:
+  push:
+    paths:
+      - 'packages/frontron/**'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.TOKEN }}
+
+    - name: Sync to Frontron Repository
+      run: |
+        git config --global user.email "andongmin94@gmail.com"
+        git config --global user.name "안동민"
+        git remote add frontron-repo https://github.com/Frontron/frontron.git
+        git fetch frontron-repo
+        git checkout main
+        git rebase frontron-repo/main
+        git push frontron-repo main
+      shell: /usr/bin/bash -e {0}
